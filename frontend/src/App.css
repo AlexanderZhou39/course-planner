@@ -34,6 +34,9 @@
 
 .card {
   padding: 2em;
+  button {
+    margin-top: 25rem;
+  }
 }
 
 .read-the-docs {
