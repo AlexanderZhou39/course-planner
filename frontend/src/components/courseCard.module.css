@@ -1,0 +1,13 @@
+.col-md, .col-sm {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: clip;
+}
+
+.col-sm {
+	width: 4rem;
+}
+
+.col-md {
+	width: 8rem;
+}

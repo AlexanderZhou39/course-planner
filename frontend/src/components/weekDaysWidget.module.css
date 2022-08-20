@@ -1,0 +1,24 @@
+.week-container {
+	border-radius: 0.7rem;
+	overflow: hidden;
+	border: 1px solid black;
+}
+
+.day {
+	display: inline-block;
+	padding: 0.5rem;
+	font-size: 0.7rem;
+	border-right: 1px solid black;
+
+	&.selected {
+		background-color: rgb(209 213 219);
+	}
+
+	@media (max-width: 768px) {
+		padding: 0.5rem 0.25rem;
+	}
+}
+
+.day:last-child {
+	border-right: none;
+}

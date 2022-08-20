@@ -5,13 +5,17 @@
   "type": "module",
   "scripts": {
     "f:dev": "cd ./frontend && vite",
-    "f:build": "cd ./frontend && tsc && vite build",
+    "build": "cd ./frontend && tsc && vite build",
     "f:preview": "cd ./frontend && vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "express": "^4.18.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "wouter": "^2.8.0-alpha.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",

@@ -4,13 +4,18 @@ import legacy from '@vitejs/plugin-legacy';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    legacy({
-      targets: ['defaults', 'not IE 11']
-    })
-  ],
-  server: {
-    port: 3000
-  }
+	plugins: [
+		react(),
+		legacy({
+			targets: ['defaults', 'not IE 11']
+		})
+	],
+	server: {
+		port: 3000
+	},
+	css: {
+		modules: {
+			localsConvention: 'camelCase'
+		}
+	}
 });
