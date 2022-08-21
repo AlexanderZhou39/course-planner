@@ -18,6 +18,11 @@ function App() {
 						<Route path='/courses/add'>
 							<CoursesForm />
 						</Route>
+						<Route path='/courses/:id/edit'>
+							{(params) => (
+								<CoursesForm id={parseInt(params.id)} />
+							)}
+						</Route>
 						<Route path='/:rest*'>
 							<h1 className='text-2xl font-bold text-center'>404 Page Not Found</h1>
 						</Route>

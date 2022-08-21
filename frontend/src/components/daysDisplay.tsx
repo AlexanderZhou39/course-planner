@@ -1,6 +1,6 @@
-import s from './weekDays.module.css';
+import s from './daysDisplay.module.css';
 
-function WeekDays({ days }: { days: number[] }) {
+function DaysDisplay({ days }: { days: number[] }) {
 	return (
 		<div className={s.weekContainer}>
 			<span className={`${s.day} ${days.includes(0) ? s.selected : ''}`}>
@@ -29,4 +29,4 @@ function WeekDays({ days }: { days: number[] }) {
 	);
 }
 
-export default WeekDays;
+export default DaysDisplay;

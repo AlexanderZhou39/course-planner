@@ -1,4 +1,5 @@
 export type Time = {
+	id: string,
 	days: number[],
 	start: number,
 	end: number,
@@ -6,6 +7,7 @@ export type Time = {
 };
 
 export type Section = {
+	id: string,
 	code: string,
 	instructor: string,
 	seats: number,
@@ -13,9 +15,15 @@ export type Section = {
 };
 
 export type Course = {
-	id: number,
+	id: string,
 	name: string,
 	code: string,
 	units: number,
 	sections: Section[]
 };
+
+export type IdCounter = {
+	course: number,
+	section: number,
+	time: number
+};	
