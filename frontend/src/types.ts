@@ -22,6 +22,16 @@ export type Course = {
 	sections: Section[]
 };
 
+export type CourseSection = {
+	courseName: string,
+	courseCode: string,
+	courseUnits: number,
+	sectionCode: string,
+	sectionInstruct: string,
+	sectionSeats: number,
+	times: Time[]
+};
+
 export type IdCounter = {
 	course: number,
 	section: number,

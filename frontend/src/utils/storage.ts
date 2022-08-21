@@ -28,6 +28,16 @@ export function saveCourse(course: Course) {
 	localStorage.setItem('courses', JSON.stringify(courses));
 }
 
+export function deleteCourse(id: string) {
+	const courses = getCourses();
+	const i = courses.findIndex(c => c.id === id);
+	if (i !== -1) {
+		courses.splice(i, 1);
+	}
+	localStorage.setItem('courses', JSON.stringify(courses));
+	return courses;
+}
+
 export function getIdCounts() {
 	const json = localStorage.getItem('ids');
 	if (!json) {

@@ -1,12 +1,13 @@
 import { Link } from "wouter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import DaysDisplay from "./daysDisplay";
 import formatAMPM from "../utils/dateformat";
 import { Course } from "../types";
 import s from './courseCard.module.css';
 
-function CourseCard({ course }: { course: Course }) {
+function CourseCard({ course, onDelete }: { course: Course, onDelete: () => void }) {
+
 	const sections = course.sections.map((section, x) => {
 		const times = section.times.map((time, y) => (
 			<div className="mb-3 flex flex-row flex-wrap" key={y}>
@@ -33,12 +34,17 @@ function CourseCard({ course }: { course: Course }) {
 	});
 
 	return (
-		<div className='bg-white rounded-2xl p-5 max-w-3xl mb-10 text-sm boxshadow relative'>
+		<div className='bg-white rounded-2xl p-5 mb-10 text-sm boxshadow relative'>
 			<Link 
 				to={`/courses/${course.id.split('-')[1]}/edit`} 
-				className='absolute top-5 right-5 text-gray-600 hover:text-gray-400'>
+				className='absolute top-5 left-5 text-gray-600 hover:text-gray-400'>
 				<FontAwesomeIcon icon={faPencil} /> Edit
 			</Link>
+			<button 
+				onClick={() => onDelete()}
+				className='absolute top-5 right-5 text-gray-600 hover:text-gray-400'>
+				<FontAwesomeIcon icon={faTrash} /> Delete
+			</button>
 			<h3 className="text-center text-xl mb-0 font-bold">{course.code.toUpperCase()}</h3>
 			<h4 className="text-center text-xl mb-1 font-bold">{course.name}</h4>
 			<h5 className="text-center text-sm mb-5">{course.units} Units</h5>
