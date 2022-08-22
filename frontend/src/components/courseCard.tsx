@@ -1,37 +1,17 @@
 import { Link } from "wouter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
-import DaysDisplay from "./daysDisplay";
-import formatAMPM from "../utils/dateformat";
 import { Course } from "../types";
-import s from './courseCard.module.css';
+import { useRef, useState } from "react";
+import SectionBlock from "./sectionBlock";
 
 function CourseCard({ course, onDelete }: { course: Course, onDelete: () => void }) {
+	const [confirm, setConfirm] = useState(false);
+	const timeout = useRef<number>();
 
-	const sections = course.sections.map((section, x) => {
-		const times = section.times.map((time, y) => (
-			<div className="mb-3 flex flex-row flex-wrap" key={y}>
-				<p className={`${s.colSm} mr-3`}>{time.type}</p>
-				<p className='mr-3'>
-					{formatAMPM(new Date(time.start))} - {formatAMPM(new Date(time.end))}
-				</p>
-				<DaysDisplay days={time.days} />
-			</div>
-		));
-
-		return (
-			<div className="section flex flex-col mb-5" key={x}>
-				<div className="flex flex-row">
-					<p className={`${s.colSm} mr-3 font-bold mb-5`}>{section.code}</p>
-					<p className={`${s.colMd} mr-5 font-bold mb-5`}>{section.instructor}</p>
-					<p className='mb-5'>{section.seats} seats</p>
-				</div>
-				<div className="flex flex-col">
-					{times}
-				</div>
-			</div>
-		);
-	});
+	const sections = course.sections.map((section, i) => (
+		<SectionBlock section={section} key={i} />
+	));
 
 	return (
 		<div className='bg-white rounded-2xl p-5 mb-10 text-sm boxshadow relative'>
@@ -41,9 +21,19 @@ function CourseCard({ course, onDelete }: { course: Course, onDelete: () => void
 				<FontAwesomeIcon icon={faPencil} /> Edit
 			</Link>
 			<button 
-				onClick={() => onDelete()}
+				onClick={() => {
+					if (confirm) {
+						clearTimeout(timeout.current);
+						onDelete();
+					} else {
+						setConfirm(true);
+						timeout.current = setTimeout(() => {
+							setConfirm(false);
+						}, 3000);
+					}
+				}}
 				className='absolute top-5 right-5 text-gray-600 hover:text-gray-400'>
-				<FontAwesomeIcon icon={faTrash} /> Delete
+				<FontAwesomeIcon icon={faTrash} /> {confirm ? 'Confirm?' : 'Delete'}
 			</button>
 			<h3 className="text-center text-xl mb-0 font-bold">{course.code.toUpperCase()}</h3>
 			<h4 className="text-center text-xl mb-1 font-bold">{course.name}</h4>

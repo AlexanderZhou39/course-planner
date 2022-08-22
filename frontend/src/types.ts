@@ -1,9 +1,11 @@
+export type TimeTypes = '' | 'Lec' | 'Lab' | 'Disc' | 'Final' | 'Other';
+
 export type Time = {
 	id: string,
 	days: number[],
 	start: number,
 	end: number,
-	type: string
+	type: TimeTypes
 };
 
 export type Section = {
@@ -22,14 +24,19 @@ export type Course = {
 	sections: Section[]
 };
 
-export type CourseSection = {
-	courseName: string,
-	courseCode: string,
-	courseUnits: number,
-	sectionCode: string,
-	sectionInstruct: string,
-	sectionSeats: number,
-	times: Time[]
+export type CourseSection = Section & {
+	course: {
+		name: string,
+		code: string,
+		units: number
+	}
+};
+
+export type Schedule = {
+	id: string,
+	name: string,
+	noConflict: boolean,
+	sections: CourseSection[]
 };
 
 export type IdCounter = {

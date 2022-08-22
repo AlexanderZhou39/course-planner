@@ -1,8 +1,10 @@
-import { Route, Switch, Redirect } from 'wouter';
+import { Route, Switch } from 'wouter';
 
 import Navbar from './components/navbar';
 import Courses from './pages/courses';
 import CoursesForm from './pages/coursesForm';
+import Schedules from './pages/schedules';
+import SchedulesForm from './pages/schedulesForm';
 import './App.css';
 
 function App() {
@@ -21,6 +23,17 @@ function App() {
 						<Route path='/courses/:id/edit'>
 							{(params) => (
 								<CoursesForm id={parseInt(params.id)} />
+							)}
+						</Route>
+						<Route path='/schedules'>
+							<Schedules />
+						</Route>
+						<Route path='/schedules/add'>
+							<SchedulesForm />
+						</Route>
+						<Route path='/schedules/:id/edit'>
+							{(params) => (
+								<SchedulesForm id={parseInt(params.id)} />
 							)}
 						</Route>
 						<Route path='/:rest*'>

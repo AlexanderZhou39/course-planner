@@ -1,4 +1,4 @@
-import { Course, IdCounter } from "../types";
+import { Course, IdCounter, Schedule } from "../types";
 
 export function getCourses() {
 	const json = localStorage.getItem('courses');
@@ -38,18 +38,73 @@ export function deleteCourse(id: string) {
 	return courses;
 }
 
-export function getIdCounts() {
-	const json = localStorage.getItem('ids');
-	if (!json) {
-		return {
-			course: 0,
-			section: 0,
-			time: 0
-		};
+const getIdCount = (key: string) => {
+	const count = localStorage.getItem(key);
+	if (!count) {
+		return 0;
 	}
-	return JSON.parse(json) as IdCounter;
+	return parseInt(count);
+}
+
+export function getIdCounts() {
+	const course = getIdCount('courseIdCount');
+	const section = getIdCount('sectionIdCount');
+	const time = getIdCount('timeIdCount');
+	return {
+		course,
+		section,
+		time
+	} as IdCounter;
 }
 
 export function saveIdCounts(counter: IdCounter) {
-	localStorage.setItem('ids', JSON.stringify(counter));
+	localStorage.setItem('courseIdCount', String(counter.course));
+	localStorage.setItem('sectionIdCount', String(counter.section));
+	localStorage.setItem('timeIdCount', String(counter.time));
+}
+
+export function getSchedules() {
+	const json = localStorage.getItem('schedules');
+	if (!json) {
+		return [];
+	}
+	return JSON.parse(json) as Schedule[];
+}
+
+export function getSchedule(id: number) {
+	const schedules = getSchedules();
+	const i = schedules.findIndex(c => c.id === `schedule-${id}`);
+	if (i !== -1) {
+		return schedules[i];
+	}
+	return -1;
+}
+
+export function saveSchedule(schedule: Schedule) {
+	const schedules = getSchedules();
+	const existingIndex = schedules.findIndex(s => s.id === schedule.id);
+	if (existingIndex !== -1) {
+		schedules[existingIndex] = schedule;
+	} else {
+		schedules.push(schedule);
+	}
+	localStorage.setItem('schedules', JSON.stringify(schedules));
+}
+
+export function deleteSchedule(id: string) {
+	const schedules = getSchedules();
+	const i = schedules.findIndex(s => s.id === id);
+	if (i !== -1) {
+		schedules.splice(i, 1);
+	}
+	localStorage.setItem('schedules', JSON.stringify(schedules));
+	return schedules;
+}
+
+export function getScheduleIdCount() {
+	return getIdCount('scheduleIdCount');
+}
+
+export function saveScheduleIdCount(count: number) {
+	localStorage.setItem('scheduleIdCount', String(count));
 }

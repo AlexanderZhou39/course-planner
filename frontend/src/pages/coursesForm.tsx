@@ -1,16 +1,20 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCaretUp, faPlus, faMinus, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { 
+	faCaretDown, faCaretUp, faPlus, 
+	faMinus, faFloppyDisk, faFileExport 
+} from '@fortawesome/free-solid-svg-icons';
 import DaysWidget from '../components/daysWidget';
 import createBlankCourse from '../utils/createBlankCourse';
 import createBlankSection from '../utils/createBlankSection';
 import createBlankTime from '../utils/createBlankTime';
 import timeInputFormat from '../utils/timeInputFormat';
-import { Course, IdCounter, Section } from '../types';
+import { Course, IdCounter, Section, TimeTypes } from '../types';
 import getSortedInputs from '../utils/inputSort';
 import timeInputToStamp from '../utils/timeInputToStamp';
 import { getCourse, getIdCounts, saveCourse, saveIdCounts } from '../utils/storage';
 import { useLocation } from 'wouter';
+import copyCourse from '../utils/copyCourse';
 
 type SAction = {
 	type: 'delete' | 'remove-time' | 'add-time' | 'add' | 'moveup' | 'movedown' | 'set'
@@ -100,7 +104,7 @@ function CoursesForm({ id }: { id?: number }) {
 		} as SAction);
 	}, []);
 
-	const onSave = () => {
+	const onSave = (asnew = false) => {
 		const code = (
 			document.getElementById('course-code') as HTMLInputElement
 		).value;
@@ -141,7 +145,7 @@ function CoursesForm({ id }: { id?: number }) {
 
 			for (let i = 0; i < times.length; i++) {
 				const time = times[i];
-				time.type = timeTypes[i].value;
+				time.type = timeTypes[i].value as TimeTypes;
 				time.start = timeInputToStamp(timeStarts[i].value);
 				time.end = timeInputToStamp(timeEnds[i].value);
 				time.days = JSON.parse(timeDays[i].value) as number[];
@@ -150,7 +154,11 @@ function CoursesForm({ id }: { id?: number }) {
 			}
 			data.sections.push(section);
 		}
-		saveCourse(data);
+		if (asnew) {
+			saveCourse(copyCourse(data, idCounter));
+		} else {
+			saveCourse(data);
+		}
 		saveIdCounts(idCounter.current);
 		setLocation('/');
 	};
@@ -160,12 +168,18 @@ function CoursesForm({ id }: { id?: number }) {
 			<div className='flex flex-row flex-wrap mb-3' key={time.id}>
 				<div className='mr-5 w-44'>
 					<label className='block' htmlFor={`${section.id}-time-type`}>Type</label>
-					<input 
+					<select 
 						className='w-full py-1 px-2 border-b border-solid border-black bg-gray-100'
-						placeholder='Lec, Lab, Final, ...'
+						name={`${section.id}-time-type`} id={`${i}:${x}`}
 						defaultValue={time.type}
-						type="text" name={`${section.id}-time-type`} id={`${i}:${x}`}
-					/>
+					>
+						<option value="">---</option>
+						<option value="Lec">Lecture</option>
+						<option value="Lab">Lab</option>
+						<option value="Disc">Discussion</option>
+						<option value="Final">Final</option>
+						<option value="Other">Other</option>
+					</select>
 				</div>
 				<div className='mr-5 w-44'>
 					<label className='block' htmlFor={`${section.id}-time-start`}>Start Time</label>
@@ -272,7 +286,9 @@ function CoursesForm({ id }: { id?: number }) {
 
 	return (
 		<>
-			<h1 className="text-2xl font-bold text-center mb-8">{id ? 'Edit' : 'Add'} Course</h1>
+			<h1 className="text-2xl font-bold text-center mb-8">
+				{id !== undefined ? 'Edit' : 'Add'} Course
+			</h1>
 			<div className='w-full max-w-5xl mx-auto block bg-white rounded-2xl py-5 px-5 mb-10 boxshadow'>
 				<h1 className='text-xl text-center font-bold mb-5'>Course</h1>
 				<div className="flex flex-row flex-wrap justify-between mb-8">
@@ -323,12 +339,20 @@ function CoursesForm({ id }: { id?: number }) {
 				<div className="pl-5">
 					{sectionsJSX}
 				</div>
-				<div className='mt-10 mb-5'>
+				<div className='mt-10 mb-5 flex flex-row flex-wrap justify-center'>
 					<button 
-						className='block mx-auto bg-slate-500 hover:bg-slate-400 text-white py-3 px-10 rounded-2xl'
+						className={`bg-gray-200 hover:bg-gray-300 text-black py-3 px-10 rounded-2xl mb-3 mr-3 ${
+							id !== undefined ? '' : 'hidden'
+						}`}
+						onClick={() => onSave(true)}
+					>
+						<FontAwesomeIcon icon={faFileExport}/> Save As New
+					</button>
+					<button 
+						className='bg-slate-500 hover:bg-slate-400 text-white py-3 px-10 rounded-2xl mb-3 mr-3'
 						onClick={() => onSave()}
 					>
-						<FontAwesomeIcon icon={faFloppyDisk }/> Save Changes
+						<FontAwesomeIcon icon={faFloppyDisk}/> Save Changes
 					</button>
 				</div>
 			</div>

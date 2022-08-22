@@ -12,9 +12,9 @@ function Courses() {
 		setData(deleteCourse(id));
 	};
 
-	const cards = data.map((course, i) => (
-		<div className='w-full lg:w-1/2 2xl:w-1/3 lg:px-5'>
-			<CourseCard course={course} key={course.id} onDelete={() => onDelete(course.id)} />
+	const cards = data.map(course => (
+		<div className='w-full lg:w-1/2 2xl:w-1/3 lg:px-5' key={course.id}>
+			<CourseCard course={course} onDelete={() => onDelete(course.id)} />
 		</div>
 	));
 
@@ -31,6 +31,9 @@ function Courses() {
 					</Link>
 				</div>
 			</div>
+			<h4 className={`text-center text-lg my-10 ${
+				data.length ? 'hidden' : ''
+			}`}>Add courses to start planning!</h4>
 			<div className="flex flex-row flex-wrap">
 				{cards}
 			</div>

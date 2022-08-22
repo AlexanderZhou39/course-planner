@@ -1,8 +1,8 @@
 import s from './daysDisplay.module.css';
 
-function DaysDisplay({ days }: { days: number[] }) {
+function DaysDisplay({ days, className }: { days: number[], className?: string }) {
 	return (
-		<div className={s.weekContainer}>
+		<div className={`${s.weekContainer} ${className}`}>
 			<span className={`${s.day} ${days.includes(0) ? s.selected : ''}`}>
 				Mon
 			</span>
