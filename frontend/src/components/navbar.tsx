@@ -11,7 +11,8 @@ function Navbar() {
 				</h1>
 				<nav className='flex flex-col md:flex-row text-white'>
 					<Link to='/' className='hover:text-gray-300 mr-10 mb-5 md:mb-0'>Courses</Link>
-					<Link to='/schedules' className='hover:text-gray-300'>Schedules</Link>
+					<Link to='/schedules' className='hover:text-gray-300 mr-10 mb-5 md:mb-0'>Schedules</Link>
+					<Link to='/calendar' className='hover:text-gray-300'>Calendar</Link>
 				</nav>
 			</div>
 		</div>

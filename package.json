@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "f:dev": "cd ./frontend && vite",
+    "dev": "cd ./frontend && vite",
     "build": "cd ./frontend && tsc && vite build",
-    "f:preview": "cd ./frontend && vite preview"
+    "preview": "cd ./frontend && vite preview"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",

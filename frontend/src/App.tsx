@@ -5,6 +5,7 @@ import Courses from './pages/courses';
 import CoursesForm from './pages/coursesForm';
 import Schedules from './pages/schedules';
 import SchedulesForm from './pages/schedulesForm';
+import CalendarView from './pages/calendar';
 import './App.css';
 
 function App() {
@@ -35,6 +36,9 @@ function App() {
 							{(params) => (
 								<SchedulesForm id={parseInt(params.id)} />
 							)}
+						</Route>
+						<Route path='/calendar'>
+							<CalendarView />
 						</Route>
 						<Route path='/:rest*'>
 							<h1 className='text-2xl font-bold text-center'>404 Page Not Found</h1>

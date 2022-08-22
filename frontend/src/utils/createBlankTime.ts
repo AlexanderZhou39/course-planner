@@ -11,7 +11,7 @@ export default function createBlankTime(id: React.MutableRefObject<IdCounter>): 
 		id: `time-${idCount}`,
 		type: '',
 		days: [],
-		start: (new Date(1970, 1, 1, 0, 0)).getTime(),
-		end: (new Date(1970, 1, 1, 0, 0)).getTime()
+		start: (new Date(1970, 0, 1, 0, 0)).getTime(),
+		end: (new Date(1970, 0, 1, 0, 0)).getTime()
 	};
 };

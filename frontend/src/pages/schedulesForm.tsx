@@ -81,7 +81,6 @@ function SchedulesForm({ id }: { id?: number }) {
 			noConflict: hideConflict,
 			sections: selected
 		}
-		console.log(data);
 		saveSchedule(data);
 		saveScheduleIdCount(idCounter.current);
 		setLocation('/schedules');
@@ -98,7 +97,7 @@ function SchedulesForm({ id }: { id?: number }) {
 					<Link 
 						to='/courses/add'
 						className='text-blue-600 hover:text-blue-400 hover:underline'
-					>Add them here.</Link>
+					>Add a course here.</Link>
 				</h4>
 			</>
 		);
