@@ -252,18 +252,18 @@ function CoursesForm({ id }: { id?: number }) {
 			<div key={section.id} className='mb-10'>
 				<div className="flex flex-row justify-between mb-3">
 					<div>
-						<div className='text-lg font-bold mb-3'>
+						<div className='text-lg font-bold mb-1'>
 							<h4 className='inline-block w-20'>Section</h4>
 							<span className='inline-block '>{i+1}</span>
 							<button 
 								onClick={() => duplicateSection(i)}
-								className='py-1 px-3 rounded-xl ml-3 text-base font-normal bg-gray-200  hover:bg-gray-300 text-gray-600'
+								className='py-1 px-3 rounded-xl ml-3 text-base font-normal bg-gray-200  hover:bg-gray-300 text-gray-600 mb-2'
 							>
 								<FontAwesomeIcon icon={faClone} /> Duplicate
 							</button>
 							<button 
 								onClick={() => dispatch({ type: 'delete', index: i } as SAction)}
-								className='py-1 px-3 rounded-xl ml-3 text-base font-normal bg-gray-200  hover:bg-gray-300 text-gray-600'
+								className='py-1 px-3 rounded-xl ml-3 text-base font-normal bg-gray-200  hover:bg-gray-300 text-gray-600 mb-2'
 							>
 								<FontAwesomeIcon icon={faTrash} /> Remove
 							</button>
