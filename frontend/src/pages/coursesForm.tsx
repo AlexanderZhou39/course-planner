@@ -150,8 +150,6 @@ function CoursesForm({ id }: { id?: number }) {
 		} as SAction);
 	};
 
-	console.log(sections)
-
 	const onSave = (asnew = false) => {
 		const code = (
 			document.getElementById('course-code') as HTMLInputElement
