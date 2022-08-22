@@ -4,9 +4,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'wouter';
 import CourseCard from '../components/courseCard';
 import { deleteCourse, getCourses } from '../utils/storage';
+import compareCourses from '../utils/courseSort';
+
 
 function Courses() {
-	const [data, setData] = useState(getCourses());
+	const [data, setData] = useState(getCourses().sort(compareCourses));
 
 	const onDelete = (id: string) => {
 		setData(deleteCourse(id));

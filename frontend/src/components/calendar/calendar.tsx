@@ -13,10 +13,10 @@ const getWindowWidth = () => {
 };
 
 const eventColors = [ 
-	'#02c39a', '#fde74c', '#001011', '#d9c5b2', '#ffa987', 
+	'#02c39a', '#fde74c', '#d9c5b2', '#ffa987', '#329F5B',
 	'#50d8d7', '#dcd6f7', '#BBDB9B', '#9DBF9E', '#E1F0C4',
-	'#A63446', '#EF8354', '#C2D3CD', '#ECE2D0',
-	'#F7B2AD'
+	'#C2D3CD', '#ECE2D0', '#758E4F', '#62C370', '#BBBE64',
+	'#F7B2AD', '#72A276'
 ];
 
 const shuffleArray = (array: string[]) => {
@@ -55,11 +55,20 @@ function Calendar({ data }: P) {
 	let minTime = 8;
 	let maxTime = 21;
 	let hasWeekends = false;
+	let key = null;
 	if (data) {
 		minTime = 23;
 		maxTime = 1;
+		const keyLabels = [];
+
 		for (let i = 0; i < data.length; i++) {
 			const section = data[i];
+			keyLabels.push({
+				color: colors[i],
+				course: section.course.name,
+				code: section.course.code
+			});
+
 			for (let x = 0; x < section.times.length; x++) {
 				const start = new Date(section.times[x].start);
 				const end = new Date(section.times[x].end);
@@ -81,6 +90,27 @@ function Calendar({ data }: P) {
 				}
 			}
 		}
+
+		const keyLabelsJSX = keyLabels.map((k, i) => (
+			<div className='flex flex-row flex-nowrap xl:w-1/2' key={i}>
+				<div 
+					style={{
+						backgroundColor: k.color
+					}}
+					className='w-5 h-5 inline-block mr-5 shrink-0' 
+				/>
+				<p className='inline-block'>{k.code ? `${k.code.toUpperCase()} (${k.course})` : k.course}</p>
+			</div>
+		));
+
+		key = (
+			<div className='w-full bg-white boxshadow rounded-xl mb-5 p-10'>
+				<h1 className='text-center text-xl mb-5'>Key</h1>
+				<div className="flex flex-col xl:flex-row xl:flex-wrap justify-between">
+					{keyLabelsJSX}
+				</div>
+			</div>
+		);
 	}
 
 	let blockSize = 5;
@@ -108,8 +138,11 @@ function Calendar({ data }: P) {
 	}
 		
 	return (
-		<div className={`w-full bg-white boxshadow rounded-xl flex flex-col md:flex-row overflow-hidden ${s.calendarContainer}`}>
-			{columns}
+		<div>
+			{key}
+			<div className={`w-full bg-white boxshadow rounded-xl flex flex-col md:flex-row overflow-hidden ${s.calendarContainer}`}>
+				{columns}
+			</div>
 		</div>
 	);
 }

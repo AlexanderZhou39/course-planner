@@ -6,6 +6,6 @@ export default function formatAMPM(date: Date) {
 	hours = hours ? hours : 12; // the hour '0' should be '12'
 	minutes = minutes < 10 ? '0' + minutes : minutes;
 	hours = hours < 10 ? '0' + hours : hours;
-	const strTime = hours + ':' + minutes + ' ' + ampm;
+	const strTime = hours + ':' + minutes + ampm;
 	return strTime;
 }

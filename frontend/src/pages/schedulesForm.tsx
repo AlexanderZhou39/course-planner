@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faFileExport } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faFileExport, faX } from "@fortawesome/free-solid-svg-icons";
 import SectionBlock from "../components/sectionBlock";
 import { CourseSection, Schedule, Section } from "../types";
 import checkSectionConflict from "../utils/checkSectionConflict";
-import { getCourses, getSchedule, getScheduleIdCount, saveSchedule, saveScheduleIdCount } from "../utils/storage";
+import { 
+	getCourses, getSchedule, getScheduleIdCount, 
+	saveSchedule, saveScheduleIdCount 
+} from "../utils/storage";
 import createBlankSchedule from "../utils/createBlankSchedule";
 import { useLocation } from "wouter";
+import compareCourses from "../utils/courseSort";
 
 function SchedulesForm({ id }: { id?: number }) {
-	const courses = getCourses();
+	const courses = getCourses().sort(compareCourses);
 	const idCounter = useRef(0);
 	const sId = useRef('');
 	const nameRef = useRef<HTMLInputElement>(null);
@@ -183,6 +187,12 @@ function SchedulesForm({ id }: { id?: number }) {
 						Automatically hides sections with conflicting times. Finals can only conflict with other finals and are assumed to be on the same week. Meetings with identical start and end times are ignored. Uncheck if you experience performance issues.
 					</p>
 				</div>
+				<button 
+					onClick={() => setSelected([])}
+					className='bg-gray-200 hover:bg-gray-300 text-black py-3 px-10 rounded-xl mb-5'
+				>
+					<FontAwesomeIcon icon={faX} /> De-select all
+				</button>
 				<div>
 					{coursesJSX}
 				</div>

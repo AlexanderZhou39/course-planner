@@ -5,9 +5,11 @@ import { useState } from "react";
 import { deleteSchedule, getSchedules } from "../utils/storage";
 import ScheduleCard from "../components/scheduleCard";
 import { Schedule } from "../types";
+import compareSchedules from "../utils/scheduleSort";
+
 
 function Schedules() {
-	const [data, setData] = useState<Schedule[]>(getSchedules());
+	const [data, setData] = useState<Schedule[]>(getSchedules().sort(compareSchedules));
 
 	const onDelete = (id: string) => {
 		setData(deleteSchedule(id));

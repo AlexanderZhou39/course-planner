@@ -5,9 +5,10 @@ import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 import Calendar from "../components/calendar/calendar";
 import { Schedule } from "../types";
 import { getSchedules } from "../utils/storage";
+import compareSchedules from "../utils/scheduleSort";
 
 function CalendarView() {
-	const schedules = getSchedules();
+	const schedules = getSchedules().sort(compareSchedules);
 	const [selected, setSelected] = useState<Schedule | undefined>(schedules?.[0]);
 	const [reshuffle, setReshuffle] = useState(0);
 

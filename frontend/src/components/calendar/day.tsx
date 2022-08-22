@@ -1,4 +1,5 @@
 import { CourseSection } from "../../types";
+import formatAMPM from '../../utils/dateformat';
 import s from './day.module.css';
 
 type P = {
@@ -117,19 +118,17 @@ function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 								backgroundColor: eventColor,
 								color: textColor
 							}}
-							className='grow rounded-xl overflow-y-scroll pt-1'
+							className='grow rounded-xl overflow-y-scroll py-2'
 						>
-							<h4 className='text-center'>{section.course.code.toUpperCase()}</h4>
+							<h4 className='text-center'>{time.type.toUpperCase()}</h4>
+							<h4 className='text-center'>
+								{formatAMPM(startDate)} - {formatAMPM(new Date(time.end))}
+							</h4>
 							{
-								height >= 0.8 ?
-									<>
-										<h5 className='text-center text-sm'>{section.course.name}</h5>
-										<p className='text-center text-sm'>{time.type}</p>
-									</>
-								:
-									null
+								height > 0.9 ?
+									<h4 className='text-center'>{section.course.code}</h4>
+								: null
 							}
-							
 						</div>
 					</div>
 				);
