@@ -2,7 +2,8 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
 	faCaretDown, faCaretUp, faPlus, 
-	faMinus, faFloppyDisk, faFileExport 
+	faMinus, faFloppyDisk, faFileExport,
+	faClone, faTrash 
 } from '@fortawesome/free-solid-svg-icons';
 import DaysWidget from '../components/daysWidget';
 import createBlankCourse from '../utils/createBlankCourse';
@@ -14,7 +15,7 @@ import getSortedInputs from '../utils/inputSort';
 import timeInputToStamp from '../utils/timeInputToStamp';
 import { getCourse, getIdCounts, saveCourse, saveIdCounts } from '../utils/storage';
 import { useLocation } from 'wouter';
-import copyCourse from '../utils/copyCourse';
+import copyCourse, { copySection } from '../utils/copyCourse';
 
 type SAction = {
 	type: 'delete' | 'remove-time' | 'add-time' | 'add' | 'moveup' | 'movedown' | 'set'
@@ -27,7 +28,7 @@ const SectionsReducer = (state: Section[], action: SAction): Section[] => {
 	switch (action.type) {
 		case 'delete':
 			const copy = [...state];
-			copy.pop();
+			copy.splice(action.index, 1);
 			return copy;
 		case 'remove-time':
 			const rCopy = [...state];
@@ -103,6 +104,53 @@ function CoursesForm({ id }: { id?: number }) {
 			state: course.sections
 		} as SAction);
 	}, []);
+
+	const duplicateSection = (i: number) => {
+		const section = sections[i];
+
+		section.code = (
+			document.getElementById(`${section.id}-code`) as HTMLInputElement
+		).value;
+		section.instructor = (
+			document.getElementById(`${section.id}-instructor`) as HTMLInputElement
+		).value;
+		section.seats = parseInt((
+			document.getElementById(`${section.id}-seats`) as HTMLInputElement
+		).value);
+
+		const times = section.times;
+		section.times = [];
+
+		const timeTypes = getSortedInputs(`${section.id}-time-type`);
+		const timeStarts = getSortedInputs(`${section.id}-time-start`);
+		const timeEnds = getSortedInputs(`${section.id}-time-end`);
+		const timeDays = getSortedInputs(`${section.id}-time-days`);
+
+		for (let i = 0; i < times.length; i++) {
+			const time = times[i];
+			time.type = timeTypes[i].value as TimeTypes;
+			time.start = timeInputToStamp(timeStarts[i].value);
+			time.end = timeInputToStamp(timeEnds[i].value);
+			time.days = JSON.parse(timeDays[i].value) as number[];
+
+			section.times.push(time);
+		}
+
+		const newSection = copySection(section, idCounter);
+		const newSections = [...sections];
+		if (i === sections.length - 1) {
+			newSections.push(newSection);
+		} else {
+			newSections.splice(i + 1, 0, newSection);
+		}
+
+		dispatch({
+			type: 'set',
+			state: newSections
+		} as SAction);
+	};
+
+	console.log(sections)
 
 	const onSave = (asnew = false) => {
 		const code = (
@@ -203,12 +251,24 @@ function CoursesForm({ id }: { id?: number }) {
 			</div>
 		));
 		return (
-			<div key={section.id} className='mb-8'>
+			<div key={section.id} className='mb-10'>
 				<div className="flex flex-row justify-between mb-3">
 					<div>
-						<div className='text-lg font-bold'>
+						<div className='text-lg font-bold mb-3'>
 							<h4 className='inline-block w-20'>Section</h4>
 							<span className='inline-block '>{i+1}</span>
+							<button 
+								onClick={() => duplicateSection(i)}
+								className='py-1 px-3 rounded-xl ml-3 text-base font-normal bg-gray-200  hover:bg-gray-300 text-gray-600'
+							>
+								<FontAwesomeIcon icon={faClone} /> Duplicate
+							</button>
+							<button 
+								onClick={() => dispatch({ type: 'delete', index: i } as SAction)}
+								className='py-1 px-3 rounded-xl ml-3 text-base font-normal bg-gray-200  hover:bg-gray-300 text-gray-600'
+							>
+								<FontAwesomeIcon icon={faTrash} /> Remove
+							</button>
 						</div>
 						<div className="flex flex-row flex-wrap mb-5">
 							<div className='mr-5 w-44'>
@@ -259,7 +319,7 @@ function CoursesForm({ id }: { id?: number }) {
 						</button>
 					</div>
 				</div>
-				<div className='text-lg font-bold'>
+				<div className='text-lg font-bold mb-3'>
 					<h4 className='inline-block w-20'>Meetings</h4>
 					<span className='inline-block mr-3'>{i+1}</span>
 					<div className="inline-block">
@@ -327,12 +387,6 @@ function CoursesForm({ id }: { id?: number }) {
 							className='py-1 px-5 bg-slate-500 hover:bg-slate-400 text-white rounded-xl mr-3'
 						>
 							<FontAwesomeIcon icon={faPlus} />
-						</button>
-						<button 
-							onClick={() => dispatch({ type: 'delete' } as SAction)}
-							className='py-1 px-5 bg-gray-200 hover:bg-gray-300 text-black rounded-xl'
-						>
-							<FontAwesomeIcon icon={faMinus} />
 						</button>
 					</div>
 				</div>

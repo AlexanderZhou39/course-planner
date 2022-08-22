@@ -15,7 +15,7 @@ function copyTime(data: Time, idCounter: React.MutableRefObject<IdCounter>): Tim
 	};
 }
 
-function copySection(data: Section, idCounter: React.MutableRefObject<IdCounter>) {
+export function copySection(data: Section, idCounter: React.MutableRefObject<IdCounter>) {
 	const id = idCounter.current.section;
 	idCounter.current = {
 		...idCounter.current,
