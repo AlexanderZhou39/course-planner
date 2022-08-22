@@ -26,6 +26,27 @@ export function saveCourse(course: Course) {
 		courses.push(course);
 	}
 	localStorage.setItem('courses', JSON.stringify(courses));
+
+	const schedules = getSchedules();
+	for (let i = 0; i < course.sections.length; i ++) {
+		const section = course.sections[i]
+		for (let x = 0; x < schedules.length; x++) {
+			const schedule = schedules[x];
+			const y = schedule.sections.findIndex(s => s.id === section.id);
+			if (y > -1) {
+				schedule.sections[y] = {
+					...section,
+					course: {
+						name: course.name,
+						units: course.units,
+						code: course.code
+					}
+				};
+			}
+		}
+
+	}
+	localStorage.setItem('schedules', JSON.stringify(schedules));
 }
 
 export function deleteCourse(id: string) {

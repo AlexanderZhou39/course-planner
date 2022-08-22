@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { CourseSection } from '../../types';
 import s from './calendar.module.css';
 import Day from './day';
@@ -12,9 +12,34 @@ const getWindowWidth = () => {
 	return window.innerWidth;
 };
 
+const eventColors = [ 
+	'#02c39a', '#fde74c', '#001011', '#d9c5b2', '#ffa987', 
+	'#50d8d7', '#dcd6f7', '#BBDB9B', '#9DBF9E', '#E1F0C4',
+	'#A63446', '#EF8354', '#C2D3CD', '#ECE2D0',
+	'#F7B2AD'
+];
+
+const shuffleArray = (array: string[]) => {
+	let currentIndex = array.length, randomIndex;
+  
+	// While there remain elements to shuffle.
+	while (currentIndex != 0) {
+		// Pick a remaining element.
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+	
+		// And swap it with the current element.
+		[array[currentIndex], array[randomIndex]] = [
+			array[randomIndex], array[currentIndex]
+		];
+	}
+	return array;
+};
+
 function Calendar({ data }: P) {
 	const days = [0, 1, 2, 3, 4];
 	const [windowWidth, setWindowWidth] = useState(getWindowWidth());
+	const colors = useRef(shuffleArray([...eventColors])).current;
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -27,23 +52,25 @@ function Calendar({ data }: P) {
 		};
 	}, [])
 
-	let minTime = 6;
+	let minTime = 8;
 	let maxTime = 21;
 	let hasWeekends = false;
 	if (data) {
+		minTime = 23;
+		maxTime = 1;
 		for (let i = 0; i < data.length; i++) {
 			const section = data[i];
 			for (let x = 0; x < section.times.length; x++) {
-				const start = (new Date(section.times[x].start)).getHours();
-				const end = (new Date(section.times[x].end)).getHours();
-				if (!(start < end)) {
+				const start = new Date(section.times[x].start);
+				const end = new Date(section.times[x].end);
+				if (!(start.getMinutes() < end.getMinutes())) {
 					continue;
 				}
-				if (start < minTime) {
-					minTime = start;
+				if (start.getHours() < minTime) {
+					minTime = start.getHours();
 				}
-				if (end > maxTime) {
-					maxTime = end;
+				if (end.getHours() > maxTime) {
+					maxTime = end.getHours();
 				}
 				if (section.times[x].days.includes(5) || section.times[x].days.includes(6)) {
 					if (!hasWeekends) {
@@ -56,9 +83,9 @@ function Calendar({ data }: P) {
 		}
 	}
 
-	let blockSize = 3;
+	let blockSize = 5;
 	if (windowWidth < 768) {
-		blockSize = 2;
+		blockSize = 3;
 	}
 	
 	const columns = days.map(day => (
@@ -69,13 +96,14 @@ function Calendar({ data }: P) {
 			maxTime={maxTime} 
 			showLabel={windowWidth < 768 ? true : false}
 			size={blockSize}
-			key={day} 
+			colors={colors}
+			key={day + 1} 
 		/>
 	));
 
 	if (windowWidth >= 768) {
 		columns.unshift(
-			<TimeColumn maxTime={maxTime} minTime={minTime} size={blockSize} />
+			<TimeColumn maxTime={maxTime} minTime={minTime} size={blockSize} key={0} />
 		);
 	}
 		

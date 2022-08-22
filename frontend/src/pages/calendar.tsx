@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 import Calendar from "../components/calendar/calendar";
 import { Schedule } from "../types";
 import { getSchedules } from "../utils/storage";
@@ -7,6 +9,7 @@ import { getSchedules } from "../utils/storage";
 function CalendarView() {
 	const schedules = getSchedules();
 	const [selected, setSelected] = useState<Schedule | undefined>(schedules?.[0]);
+	const [reshuffle, setReshuffle] = useState(0);
 
 	if (!schedules.length) {
 		return (
@@ -15,7 +18,7 @@ function CalendarView() {
 				<h4 className='text-center text-lg my-10'>
 					You have no schedules currently!<br />
 					<Link 
-						to='/schedules/add'
+						to='/schedules'
 						className='text-blue-600 hover:text-blue-400 hover:underline'
 					>Create a schedule here.</Link>
 				</h4>
@@ -48,9 +51,15 @@ function CalendarView() {
 				<div>
 					{options}
 				</div>
+				<button 
+					className='bg-slate-200 hover:bg-slate-300 text-black py-1 px-5 mt-10 rounded-xl'
+					onClick={() => setReshuffle(prev => prev + 1)}
+				>
+					<FontAwesomeIcon icon={faShuffle} /> Shuffle Colors
+				</button>
 			</div>
 			<div className="w-full mx-auto mb-10">
-				<Calendar data={selected?.sections} />
+				<Calendar data={selected?.sections} key={`calendar-${reshuffle}`} />
 			</div>
 		</>
 	);

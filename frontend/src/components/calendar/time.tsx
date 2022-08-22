@@ -54,7 +54,7 @@ function TimeColumn({ maxTime, minTime, size }: P) {
 			<div className='py-5 px-3 border-b border-solid border-gray-500 bg-slate-500 text-white'>
 				<h4 className='text-center'>Time</h4>
 			</div>
-			<div className={`grow relative`}>
+			<div className={`grow relative bg-slate-200`}>
 				{labels}
 				{blocks}
 			</div>

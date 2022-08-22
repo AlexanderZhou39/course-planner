@@ -7,7 +7,8 @@ type P = {
 	minTime: number,
 	maxTime: number,
 	showLabel: boolean,
-	size: number
+	size: number,
+	colors: string[]
 };
 
 const msPerHour = 1000 * 60 * 60;
@@ -22,7 +23,24 @@ const dayMap: { [key: number]: string } = {
 	6: 'Sun'
 };
 
-function Day({ data, day, minTime, maxTime, showLabel, size }: P) {
+const hexToRGB = (hex: string) => {
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16)
+	} : null;
+};
+
+const textContrast = (hex: string) => {
+	const rgb = hexToRGB(hex);
+	if (rgb && (rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114) > 150) {
+		return '#000000';
+	}
+	return '#ffffff';
+};
+
+function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 	const numBlocks = maxTime - minTime + 3;
 	const blocks = [];
 	for (let i = 0; i < numBlocks; i++) {
@@ -30,7 +48,7 @@ function Day({ data, day, minTime, maxTime, showLabel, size }: P) {
 			<div 
 				style={{ height: `${size}rem` }}
 				className={`${s.block} ${(i + 1) % 2 === 0 ? s.bold : ''}`} 
-				key={`block-${i}`} 
+				key={`block-${day}-${i}`} 
 			/>
 		);
 	}
@@ -55,8 +73,8 @@ function Day({ data, day, minTime, maxTime, showLabel, size }: P) {
 			}
 			labels.push(
 				<div 
-					style={{ top: `${i * size - 0.8}rem`, left: 0, zIndex: 10 }} 
-					className={`absolute w-20 h-5 pl-3 ${s.labelBg}`}
+					style={{ top: `${i * size - 0.8}rem` }} 
+					className={`absolute w-20 h-8 pl-3 left-0 z-30 rounded-xl ${s.labelBg}`}
 					key={`label-${i}`}
 				>
 					<span>
@@ -71,6 +89,9 @@ function Day({ data, day, minTime, maxTime, showLabel, size }: P) {
 	if (data) {
 		for (let i = 0; i < data.length; i++) {
 			const section = data[i];
+			const eventColor = colors[i % colors.length];
+			const textColor = textContrast(eventColor);
+
 			for (let x = 0; x < section.times.length; x++) {
 				const time = section.times[x];
 				if (!time.days.includes(day) || time.type === 'Final') {
@@ -78,8 +99,7 @@ function Day({ data, day, minTime, maxTime, showLabel, size }: P) {
 				}
 				const startDate = new Date(time.start);
 				const startHour = startDate.getHours() + Math.round(startDate.getMinutes() / 60 * 100) / 100;
-				console.log(startHour);
-				const height = Math.max(Math.round((time.end - time.start) / msPerHour * 100) / 100, 0);
+				const height = Math.round(Math.max(time.end - time.start, 0) / msPerHour * 100) / 100;
 
 				events.push(
 					<div 
@@ -87,10 +107,29 @@ function Day({ data, day, minTime, maxTime, showLabel, size }: P) {
 							top: `${(startHour - minTime + 1) * size}rem`,
 							height: `${height * size}rem`
 						}}
-						className='absolute flex w-full px-3'
+						className={`absolute flex w-full pr-10 md:pr-1 xl:pr-3 z-20 ${
+							showLabel ? 'pl-28' : 'pl-10 md:pl-1 xl:pl-3'
+						}`}
+						key={`event-${i}:${x}`}
 					>
-						<div className='grow bg-gray-300'>
-							<h1>hello world</h1>
+						<div 
+							style={{ 
+								backgroundColor: eventColor,
+								color: textColor
+							}}
+							className='grow rounded-xl overflow-y-scroll pt-1'
+						>
+							<h4 className='text-center'>{section.course.code.toUpperCase()}</h4>
+							{
+								height >= 0.8 ?
+									<>
+										<h5 className='text-center text-sm'>{section.course.name}</h5>
+										<p className='text-center text-sm'>{time.type}</p>
+									</>
+								:
+									null
+							}
+							
 						</div>
 					</div>
 				);
