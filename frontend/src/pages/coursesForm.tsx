@@ -80,7 +80,7 @@ function CoursesForm({ id }: { id?: number }) {
 	});
 	const cId = useRef('');
 	const [cCode, setCCode] = useState('');
-	const [cUnits, setCUnits] = useState(0);
+	const [cUnits, setCUnits] = useState('0');
 	const [cName, setCName] = useState('');
 	const [sections, dispatch] = useReducer(SectionsReducer, []);
 
@@ -97,7 +97,7 @@ function CoursesForm({ id }: { id?: number }) {
 		}
 		setCCode(course.code);
 		setCName(course.name);
-		setCUnits(course.units);
+		setCUnits(String(course.units));
 		cId.current = course.id;
 		dispatch({ 
 			type: 'set', 
@@ -157,14 +157,11 @@ function CoursesForm({ id }: { id?: number }) {
 		const name = (
 			document.getElementById('course-name') as HTMLInputElement
 		).value;
-		const units = parseInt((
-			document.getElementById('course-units') as HTMLInputElement
-		).value);
 
 		const data: Course = {
 			id: cId.current,
 			code: code,
-			units: units,
+			units: parseInt(cUnits) || 0,
 			name: name,
 			sections: []
 		};
@@ -363,7 +360,8 @@ function CoursesForm({ id }: { id?: number }) {
 						<label htmlFor="course-name" className='block text-lg'>Course Units</label>
 						<input 
 							className="w-full py-1 px-2 border-b border-solid border-black bg-gray-100"
-							type="number" min={0} step={1} name='course-units' defaultValue={cUnits}
+							type="number" min={0} step={1} name='course-units' value={cUnits}
+							onChange={(e) => setCUnits(e.target.value)}
 							id='course-units'
 						/>
 					</div>

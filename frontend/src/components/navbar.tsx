@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'wouter';
+import usePageTracking from '../utils/usePageTracking';
 
 function Navbar() {
+	usePageTracking();
 	return (
 		<div className="bg-slate-500 text-white px-5">
 			<div className="container mx-auto py-8 flex flex-col md:flex-row">
