@@ -1,4 +1,5 @@
 import { Course, Schedule } from "../types";
+import checkSectionConflict from "./checkSectionConflict";
 
 type PossibleSchedule = Schedule & {
 	courses: string[],
@@ -69,10 +70,36 @@ export default function generateSchedules(selectedCourses: string[], courses: Co
 
 			for (let s = 0; s < course.sections.length; s++) {
 				const section = course.sections[s];
+
+				// check if section conflicts with existing plan
+				let noConflict = true;
+				for (let ps = 0; ps < possibility.sections.length; ps++) {
+					if(checkSectionConflict(possibility.sections[ps], section)) {
+						noConflict = false;
+						break;
+					}
+				}
+				// if no conflict, add to plan
+				if (noConflict) {
+					branches++;
+					const courseSection = {
+						...section,
+						course: {
+							name: course.name,
+							code: course.code,
+							units: course.units
+						}
+					};
+					newResults.push({
+						...possibility,
+						sections: [...possibility.sections, courseSection]
+					})
+				}
 			}
 
+			if (branches === 0) {
+				
+			}
 		}
-
 	}
-
 }
