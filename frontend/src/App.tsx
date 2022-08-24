@@ -5,6 +5,7 @@ import Courses from './pages/courses';
 import CoursesForm from './pages/coursesForm';
 import Schedules from './pages/schedules';
 import SchedulesForm from './pages/schedulesForm';
+import SchedulesGenerator from './pages/schedulesGenerator';
 import CalendarView from './pages/calendar';
 import './App.css';
 
@@ -31,6 +32,9 @@ function App() {
 						</Route>
 						<Route path='/schedules/add'>
 							<SchedulesForm />
+						</Route>
+						<Route path='/schedules/generate'>
+							<SchedulesGenerator />
 						</Route>
 						<Route path='/schedules/:id/edit'>
 							{(params) => (

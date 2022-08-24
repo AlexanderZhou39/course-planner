@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faFileExport, faX } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faFileExport, faX, faShare } from "@fortawesome/free-solid-svg-icons";
 import SectionBlock from "../components/sectionBlock";
 import { CourseSection, Schedule, Section } from "../types";
 import checkSectionConflict from "../utils/checkSectionConflict";
@@ -161,10 +161,19 @@ function SchedulesForm({ id }: { id?: number }) {
 	});
 	return (
 		<>
-			<h1 className="text-2xl font-bold text-center mb-8">
+			<h1 className="text-2xl font-bold text-center mb-5">
 				{id !== undefined ? 'Edit' : 'Create'} Schedule
 			</h1>
-			<div className='w-full max-w-5xl mx-auto block bg-white rounded-2xl py-5 px-5 mb-10 boxshadow'>
+			{
+				id === undefined ?
+					<div className='w-full text-center'>
+						<Link to='/schedules/generate' className='bg-slate-500 hover:bg-slate-400 text-white py-3 px-10 rounded-xl'>
+							Go To Generator <FontAwesomeIcon icon={faShare} />
+						</Link>
+					</div>
+				: null
+			}
+			<div className='w-full max-w-5xl mx-auto block bg-white rounded-2xl py-5 px-5 mt-10 mb-10 boxshadow'>
 				<h1 className='text-xl text-center font-bold mb-5'>Schedule</h1>
 
 				<label htmlFor="schedule-name" className='block text-lg'>Name</label>
