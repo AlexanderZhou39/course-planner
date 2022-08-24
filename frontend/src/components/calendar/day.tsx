@@ -108,27 +108,38 @@ function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 							top: `${(startHour - minTime + 1) * size}rem`,
 							height: `${height * size}rem`
 						}}
-						className={`absolute flex w-full pr-10 md:pr-1 xl:pr-3 z-20 ${
+						className={`absolute flex w-full pr-10 md:pr-1 xl:pr-3 ${
 							showLabel ? 'pl-28' : 'pl-10 md:pl-1 xl:pl-3'
-						}`}
+						} ${s.event}`}
 						key={`event-${i}:${x}`}
 					>
 						<div 
-							style={{ 
-								backgroundColor: eventColor,
-								color: textColor
-							}}
-							className='grow rounded-xl overflow-y-scroll py-2'
+							className='grow relative'
 						>
-							<h4 className='text-center'>{time.type.toUpperCase()}</h4>
-							<h4 className='text-center'>
-								{formatAMPM(startDate)} - {formatAMPM(new Date(time.end))}
-							</h4>
-							{
-								height > 0.9 ?
-									<h4 className='text-center'>{section.course.code}</h4>
-								: null
-							}
+							<div 
+								style={{ 
+									backgroundColor: eventColor,
+									color: textColor
+								}}
+								className="w-full h-full rounded-xl overflow-y-scroll py-2 z-20"
+							>
+								<h4 className='text-center'>{time.type.toUpperCase()}</h4>
+								<h4 className='text-center'>
+									{formatAMPM(startDate)} - {formatAMPM(new Date(time.end))}
+								</h4>
+								{
+									height > 0.9 ?
+										<h4 className='text-center'>{section.course.code}</h4>
+									: null
+								}
+							</div>
+							<div
+								className={`${s.tooltip} rounded-xl p-5`}
+							>
+								<h4 className="text-center">{section.course.code.toUpperCase()}</h4>
+								<h4 className="text-center">{section.course.name}</h4>
+								<h4 className="text-center">{section.instructor}</h4>
+							</div>
 						</div>
 					</div>
 				);
