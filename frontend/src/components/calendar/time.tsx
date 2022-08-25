@@ -7,7 +7,7 @@ type P = {
 };
 
 function TimeColumn({ maxTime, minTime, size }: P) {
-	const numBlocks = maxTime - minTime + 3;
+	const numBlocks = maxTime - minTime + 4;
 	const blocks = [];
 	for (let i = 0; i < numBlocks; i++) {
 		blocks.push(
@@ -24,16 +24,16 @@ function TimeColumn({ maxTime, minTime, size }: P) {
 			continue;
 		}
 		let hour;
-		if ((minTime - 1 + i) === 12) {
+		if ((minTime - 2 + i) === 12) {
 			hour = 12;
 		} else {
-			hour = (minTime - 1 + i) % 12;
+			hour = (minTime - 2 + i) % 12;
 			if (hour < 10) {
 				hour = '0' + hour;
 			}
 		}
 		let meridiem = 'pm';
-		if ((minTime - 1 + i) < 12) {
+		if ((minTime - 2 + i) < 12) {
 			meridiem = 'am';
 		}
 		labels.push(

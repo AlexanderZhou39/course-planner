@@ -185,6 +185,7 @@ function CoursesForm({ id }: { id?: number }) {
 			const timeStarts = getSortedInputs(`${section.id}-time-start`);
 			const timeEnds = getSortedInputs(`${section.id}-time-end`);
 			const timeDays = getSortedInputs(`${section.id}-time-days`);
+			const timePlaces = getSortedInputs(`${section.id}-time-place`);
 
 			for (let i = 0; i < times.length; i++) {
 				const time = times[i];
@@ -192,6 +193,7 @@ function CoursesForm({ id }: { id?: number }) {
 				time.start = timeInputToStamp(timeStarts[i].value);
 				time.end = timeInputToStamp(timeEnds[i].value);
 				time.days = JSON.parse(timeDays[i].value) as number[];
+				time.place = timePlaces[i].value;
 
 				section.times.push(time);
 			}
@@ -208,7 +210,7 @@ function CoursesForm({ id }: { id?: number }) {
 
 	const sectionsJSX = sections.map((section, i) => {
 		const timesJSX = section.times.map((time, x) => (
-			<div className='flex flex-row flex-wrap mb-3' key={time.id}>
+			<div className='flex flex-row flex-wrap mb-5' key={time.id}>
 				<div className='mr-5 w-44'>
 					<label className='block' htmlFor={`${section.id}-time-type`}>Type</label>
 					<select 
@@ -224,24 +226,35 @@ function CoursesForm({ id }: { id?: number }) {
 						<option value="Other">Other</option>
 					</select>
 				</div>
-				<div className='mr-5 w-44'>
-					<label className='block' htmlFor={`${section.id}-time-start`}>Start Time</label>
+				<div className="mr-5 w-44">
+					<label className='block' htmlFor={`${section.id}-time-place`}>Place</label>
 					<input 
 						className='w-full py-1 px-2 border-b border-solid border-black bg-gray-100'
-						type='time' name={`${section.id}-time-start`} defaultValue={timeInputFormat(time.start)} id={`${i}:${x}`}
+						type='text' 
+						name={`${section.id}-time-place`} defaultValue={time.place} id={`${i}:${x}`}
+						placeholder='North Hall'
 					/>
 				</div>
-				<div className='mr-5 w-44'>
-					<label className='block' htmlFor={`${section.id}-time-end`}>End Time</label>
-					<input 
-						className='w-full py-1 px-2 border-b border-solid border-black bg-gray-100'
-						type='time' name={`${section.id}-time-end`} defaultValue={timeInputFormat(time.end)}
-						id={`${i}:${x}`}
-					/>
-				</div>
-				<div className=''>
+				<div className='mr-5'>
 					<label className='block' htmlFor={`${section.id}-time-days`}>Select Days</label>
 					<DaysWidget secId={section.id} value={time.days} id={`${i}:${x}`} />
+				</div>
+				<div className='w-40 flex flex-col'>
+					<div className='mb-2'>
+						<label className='block' htmlFor={`${section.id}-time-start`}>Start Time</label>
+						<input 
+							className='w-full py-1 px-2 border-b border-solid border-black bg-gray-100'
+							type='time' name={`${section.id}-time-start`} defaultValue={timeInputFormat(time.start)} id={`${i}:${x}`}
+						/>
+					</div>
+					<div>
+						<label className='block' htmlFor={`${section.id}-time-end`}>End Time</label>
+						<input 
+							className='w-full py-1 px-2 border-b border-solid border-black bg-gray-100'
+							type='time' name={`${section.id}-time-end`} defaultValue={timeInputFormat(time.end)}
+							id={`${i}:${x}`}
+						/>
+					</div>
 				</div>
 			</div>
 		));

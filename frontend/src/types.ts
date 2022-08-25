@@ -5,7 +5,8 @@ export type Time = {
 	days: number[],
 	start: number,
 	end: number,
-	type: TimeTypes
+	type: TimeTypes,
+	place: string
 };
 
 export type Section = {
@@ -28,7 +29,8 @@ export type CourseSection = Section & {
 	course: {
 		name: string,
 		code: string,
-		units: number
+		units: number,
+		id?: string
 	}
 };
 
@@ -38,6 +40,16 @@ export type Schedule = {
 	noConflict: boolean,
 	sections: CourseSection[]
 };
+
+export type PossibleSchedule = Schedule & {
+	courses: string[],
+	finished: boolean,
+	totalUnits: number,
+	minSeats: number,
+	startTimeSum: number,
+	timesCount: number,
+	avgStartTime: number
+}
 
 export type IdCounter = {
 	course: number,

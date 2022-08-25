@@ -15,7 +15,7 @@ function Courses() {
 	};
 
 	const cards = data.map(course => (
-		<div className='w-full lg:w-1/2 2xl:w-1/3 lg:px-5' key={course.id}>
+		<div className='card lg:px-5' key={course.id}>
 			<CourseCard course={course} onDelete={() => onDelete(course.id)} />
 		</div>
 	));

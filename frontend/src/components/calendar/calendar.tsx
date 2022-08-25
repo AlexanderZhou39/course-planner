@@ -5,7 +5,8 @@ import Day from './day';
 import TimeColumn from './time';
 
 type P = {
-	data: CourseSection[] | undefined
+	data: CourseSection[] | undefined,
+	showSeats?: boolean
 }
 
 const getWindowWidth = () => {
@@ -36,7 +37,7 @@ const shuffleArray = (array: string[]) => {
 	return array;
 };
 
-function Calendar({ data }: P) {
+function Calendar({ data, showSeats }: P) {
 	const days = [0, 1, 2, 3, 4];
 	const [windowWidth, setWindowWidth] = useState(getWindowWidth());
 	const colors = useRef(shuffleArray([...eventColors])).current;
@@ -66,7 +67,8 @@ function Calendar({ data }: P) {
 			keyLabels.push({
 				color: colors[i],
 				course: section.course.name,
-				code: section.course.code
+				code: section.course.code,
+				seats: section.seats
 			});
 
 			for (let x = 0; x < section.times.length; x++) {
@@ -99,7 +101,7 @@ function Calendar({ data }: P) {
 					}}
 					className='w-5 h-5 inline-block mr-5 shrink-0' 
 				/>
-				<p className='inline-block'>{k.code ? `${k.code.toUpperCase()} (${k.course})` : k.course}</p>
+				<p className='inline-block'>{showSeats ? `${k.seats} Seats - ` : ''} {k.code ? `${k.code.toUpperCase()} (${k.course})` : k.course}</p>
 			</div>
 		));
 

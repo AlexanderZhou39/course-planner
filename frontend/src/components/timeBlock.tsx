@@ -10,7 +10,8 @@ type P = {
 function TimeBlock({ time }: P) {
 	return (
 		<div className="mb-1 flex flex-row flex-wrap">
-			<p className={`${s.colSm} mr-3 mb-2`}>{time.type}</p>
+			<p className={`${s.colXs} mr-3 mb-2`}>{time.type}</p>
+			<p className={`${s.colSmd} mr-3 mb-2`}>{time.place}</p>
 			<p className='mr-3 mb-2'>
 				{formatAMPM(new Date(time.start))} - {formatAMPM(new Date(time.end))}
 			</p>

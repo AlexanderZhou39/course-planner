@@ -1,10 +1,7 @@
-import { Course, Schedule } from "../types";
-import checkSectionConflict from "./checkSectionConflict";
+import { Course, Schedule, PossibleSchedule, CourseSection } from "../types";
+import checkSectionConflict from "../utils/checkSectionConflict";
 
-type PossibleSchedule = Schedule & {
-	courses: string[],
-	finished: boolean
-}
+
 
 function permute<T>(permutation: T[]) {
 	let length = permutation.length,
@@ -42,9 +39,27 @@ function equivalentSchedules(a: Schedule, b: Schedule) {
 	return true;
 }
 
-export default function generateSchedules(selectedCourses: string[], courses: Course[], scheduleId: number) {
+function getStartTimeSumAndCount(s: CourseSection[]) {
+	let sum = 0;
+	let records = 0;
+	for (let sI = 0; sI < s.length; sI++) {
+		const section = s[sI];
+		for (let t = 0; t < section.times.length; t++) {
+			const time = section.times[t];
+			if (time.days.length) {
+				sum += time.start * time.days.length;
+				records += time.days.length;
+			}
+		}
+	}
+	return {
+		sum,
+		records
+	};
+}
+
+function generateSchedules(selectedCourses: string[], courses: Course[]) {
 	// setup
-	let currId = scheduleId;
 	const courseCombos = permute<string>(selectedCourses);
 	const courseMap: { [key: string]: Course } = {};
 	for (let i = 0; i < courses.length; i++) {
@@ -60,7 +75,12 @@ export default function generateSchedules(selectedCourses: string[], courses: Co
 			id: '',
 			name: '',
 			noConflict: true,
-			sections: []
+			totalUnits: 0,
+			minSeats: 99999,
+			sections: [],
+			startTimeSum: 0,
+			timesCount: 0,
+			avgStartTime: 0
 		});
 	}
 
@@ -99,12 +119,22 @@ export default function generateSchedules(selectedCourses: string[], courses: Co
 						course: {
 							name: course.name,
 							code: course.code,
-							units: course.units
+							units: course.units,
+							id: course.id
 						}
 					};
+					const newSections = [...possibility.sections, courseSection]
+					const sumAndCount = getStartTimeSumAndCount(newSections);
+					const newSTSum = possibility.startTimeSum + sumAndCount.sum;
+					const newTimesCount = possibility.timesCount + sumAndCount.records;
 					newResults.push({
 						...possibility,
-						sections: [...possibility.sections, courseSection]
+						startTimeSum: newSTSum,
+						timesCount: newTimesCount,
+						totalUnits: possibility.totalUnits + course.units,
+						minSeats: Math.min(section.seats, possibility.minSeats),
+						sections: newSections,
+						avgStartTime: newSTSum / Math.min(newTimesCount, 1)
 					})
 				}
 			}
@@ -115,6 +145,10 @@ export default function generateSchedules(selectedCourses: string[], courses: Co
 			}
 		}
 		results = newResults;
+		postMessage({
+			type: 'progress',
+			data: (c + 1) / selectedCourses.length
+		});
 	}
 
 	// merge equivalent schedules
@@ -131,16 +165,28 @@ export default function generateSchedules(selectedCourses: string[], courses: Co
 		xI++;
 	}
 
-	// assign unique Ids to results
+	// assign unique names to results
 	for (let i = 0; i < results.length; i++) {
 		const generated = results[i];
-		generated.id = `schedule-${currId}`;
-		generated.name = `generated-${currId}`;
-		currId++;
+		generated.name = `generated-${i}`;
 	}
 
-	return {
-		results: results,
-		newId: currId
-	};
+	return results;
 }
+
+onmessage = (e) => {
+	switch (e.data.type) {
+		case 'exec':
+			const data = e.data;
+			const selectedCourses = data.selectedCourses;
+			const courses = data.courses;
+			const res = generateSchedules(selectedCourses, courses);
+			postMessage({
+				type: 'result',
+				data: res
+			});
+		default:
+			break;
+
+	}
+};

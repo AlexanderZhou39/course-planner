@@ -16,7 +16,7 @@ function Schedules() {
 	};
 
 	const cards = data.map(schedule => (
-		<div className='w-full lg:w-1/2 2xl:w-1/3 lg:px-5' key={schedule.id}>
+		<div className='card lg:px-5' key={schedule.id}>
 			<ScheduleCard schedule={schedule} onDelete={() => onDelete(schedule.id)} />
 		</div>
 	));

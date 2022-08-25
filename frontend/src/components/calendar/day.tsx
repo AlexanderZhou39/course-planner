@@ -42,7 +42,7 @@ const textContrast = (hex: string) => {
 };
 
 function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
-	const numBlocks = maxTime - minTime + 3;
+	const numBlocks = maxTime - minTime + 4;
 	const blocks = [];
 	for (let i = 0; i < numBlocks; i++) {
 		blocks.push(
@@ -60,16 +60,16 @@ function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 				continue;
 			}
 			let hour;
-			if ((minTime - 1 + i) === 12) {
+			if ((minTime - 2 + i) === 12) {
 				hour = 12;
 			} else {
-				hour = (minTime - 1 + i) % 12;
+				hour = (minTime - 2 + i) % 12;
 				if (hour < 10) {
 					hour = '0' + hour;
 				}
 			}
 			let meridiem = 'pm';
-			if ((minTime - 1 + i) < 12) {
+			if ((minTime - 2 + i) < 12) {
 				meridiem = 'am';
 			}
 			labels.push(
@@ -105,7 +105,7 @@ function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 				events.push(
 					<div 
 						style={{ 
-							top: `${(startHour - minTime + 1) * size}rem`,
+							top: `${(startHour - minTime + 2) * size}rem`,
 							height: `${height * size}rem`
 						}}
 						className={`absolute flex w-full pr-10 md:pr-1 xl:pr-3 ${
@@ -134,11 +134,28 @@ function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 								}
 							</div>
 							<div
-								className={`${s.tooltip} rounded-xl p-5`}
+								className={`${s.tooltip} rounded-xl py-2 px-3 text-base`}
 							>
-								<h4 className="text-center">{section.course.code.toUpperCase()}</h4>
-								<h4 className="text-center">{section.course.name}</h4>
-								<h4 className="text-center">{section.instructor}</h4>
+								<h4 className="text-left">
+									<span className="font-bold">Code:</span> {
+										section.course.code.toUpperCase()
+									}
+								</h4>
+								<h4 className="text-left">
+									<span className="font-bold">Name:</span> {
+										section.course.name
+									}
+								</h4>
+								<h4 className="text-left">
+									<span className="font-bold">Prof:</span> {
+										section.instructor
+									}
+								</h4>
+								<h4 className="text-left">
+									<span className="font-bold">Place:</span> {
+										time.place
+									}
+								</h4>
 							</div>
 						</div>
 					</div>

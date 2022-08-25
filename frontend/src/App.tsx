@@ -13,8 +13,8 @@ function App() {
 	return (
 		<div className="App">
 			<Navbar />
-			<div className="px-5">
-				<div className="container mx-auto mt-16">
+			<div className="px-5 relative">
+				<div className="w-full sm:px-5 mt-16 app-container mx-auto">
 					<Switch>
 						<Route path='/'>
 							<Courses />

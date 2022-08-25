@@ -6,3 +6,24 @@ body, html {
 .boxshadow {
 	box-shadow: 0 0.3rem 0.5rem 0.2rem rgb(217, 217, 217);
 }
+
+.app-container {
+	max-width: 115rem;
+
+	&.no-shadow .boxshadow {
+		box-shadow: none;
+	}
+}
+
+.card {
+	width: 33.333%;
+
+	@media (max-width: 1800px) {
+		width: 50%;
+	}
+
+
+	@media (max-width: 1250px) {
+		width: 100%;
+	}
+}

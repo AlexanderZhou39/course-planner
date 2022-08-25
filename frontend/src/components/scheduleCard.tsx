@@ -14,6 +14,7 @@ type P = {
 function ScheduleCard({ schedule, onDelete }: P) {
 	const [confirm, setConfirm] = useState(false);
 	const timeout = useRef<number>();
+	const units = schedule.sections.reduce((a, b) => a + b.course.units, 0);
 
 	const sections = schedule.sections.map((section, x) => {
 		const times = section.times.map((time, y) => (
@@ -36,7 +37,7 @@ function ScheduleCard({ schedule, onDelete }: P) {
 					</h4>
 				</div>
 				<div className="flex flex-row">
-					<p className={`${s.colSm} mr-3 font-bold mb-5`}>{section.code}</p>
+					<p className={`${s.colXs} mr-3 font-bold mb-5`}>{section.code}</p>
 					<p className={`${s.colMd} mr-5 font-bold mb-5`}>{section.instructor}</p>
 					<p className='mb-5'>{section.seats} seats</p>
 				</div>
@@ -69,7 +70,8 @@ function ScheduleCard({ schedule, onDelete }: P) {
 				className='absolute top-5 right-5 text-gray-600 hover:text-gray-400'>
 				<FontAwesomeIcon icon={faTrash} /> {confirm ? 'Confirm?' : 'Delete'}
 			</button>
-			<h4 className="text-center text-xl mb-5 font-bold">{schedule.name}</h4>
+			<h4 className="text-center text-xl mb-1 font-bold">{schedule.name}</h4>
+			<h5 className="text-center text-sm mb-3">{units} Units</h5>
 			<div className="flex flex-col">
 				{sections}
 			</div>

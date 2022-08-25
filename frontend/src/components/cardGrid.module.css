@@ -1,4 +1,4 @@
-.col-md, .col-sm {
+.col-md, .col-sm, .col-xs, .col-smd {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: clip;
@@ -8,6 +8,14 @@
 	width: 4rem;
 }
 
+.col-xs {
+	width: 2.3rem;
+}
+
 .col-md {
-	width: 8rem;
+	width: 9rem;
+}
+
+.col-smd {
+	width: 5rem;
 }
