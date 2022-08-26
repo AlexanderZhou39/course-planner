@@ -12,7 +12,7 @@ function Schedules() {
 	const [data, setData] = useState<Schedule[]>(getSchedules().sort(compareSchedules));
 
 	const onDelete = (id: string) => {
-		setData(deleteSchedule(id));
+		setData(deleteSchedule(id).sort(compareSchedules));
 	};
 
 	const cards = data.map(schedule => (
@@ -27,10 +27,10 @@ function Schedules() {
 				<h1 className='text-2xl text-center font-bold mb-5'>Schedules</h1>
 				<div className='sm:absolute sm:right-0 sm:top-0 lg:right-5'>
 					<Link 
-						to='/schedules/add'
+						to='/schedules/menu'
 						className='text-center block sm:inline-block py-3 px-10 bg-slate-500 text-white hover:bg-slate-400 rounded-3xl'
 					>
-							<FontAwesomeIcon icon={faPlus} /> Create Schedule
+						<FontAwesomeIcon icon={faPlus} /> Create Schedule
 					</Link>
 				</div>
 			</div>

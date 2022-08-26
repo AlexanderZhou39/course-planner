@@ -21,5 +21,8 @@ export default defineConfig({
 		modules: {
 			localsConvention: 'camelCase'
 		}
-	}
+	},
+	// build: {
+	// 	minify: false
+	// }
 });

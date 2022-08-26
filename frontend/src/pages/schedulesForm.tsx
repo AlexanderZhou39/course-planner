@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faFileExport, faX, faShare } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faFileExport, faX, faShare, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import SectionBlock from "../components/sectionBlock";
 import { CourseSection, Schedule, Section } from "../types";
 import checkSectionConflict from "../utils/checkSectionConflict";
@@ -12,9 +12,11 @@ import {
 import createBlankSchedule from "../utils/createBlankSchedule";
 import { useLocation } from "wouter";
 import compareCourses from "../utils/courseSort";
+import Calendar from "../components/calendar/calendar";
 
 function SchedulesForm({ id }: { id?: number }) {
 	const courses = getCourses().sort(compareCourses);
+	const [preview, setPreview] = useState(false);
 	const idCounter = useRef(0);
 	const sId = useRef('');
 	const nameRef = useRef<HTMLInputElement>(null);
@@ -161,19 +163,10 @@ function SchedulesForm({ id }: { id?: number }) {
 	});
 	return (
 		<>
-			<h1 className="text-2xl font-bold text-center mb-5">
+			<h1 className="text-2xl font-bold text-center mb-10">
 				{id !== undefined ? 'Edit' : 'Create'} Schedule
 			</h1>
-			{
-				id === undefined ?
-					<div className='w-full text-center'>
-						<Link to='/schedules/generate' className='bg-slate-500 hover:bg-slate-400 text-white py-3 px-10 rounded-xl'>
-							Go To Generator <FontAwesomeIcon icon={faShare} />
-						</Link>
-					</div>
-				: null
-			}
-			<div className='w-full max-w-5xl mx-auto block bg-white rounded-2xl py-5 px-5 mt-10 mb-10 boxshadow'>
+			<div className='w-full max-w-5xl mx-auto block bg-white rounded-2xl py-5 px-5 mb-10 boxshadow'>
 				<h1 className='text-xl text-center font-bold mb-5'>Schedule</h1>
 
 				<label htmlFor="schedule-name" className='block text-lg'>Name</label>
@@ -196,12 +189,24 @@ function SchedulesForm({ id }: { id?: number }) {
 						Automatically hides sections with conflicting times. Finals can only conflict with other finals and are assumed to be on the same week. Meetings with identical start and end times are ignored. Uncheck if you experience performance issues.
 					</p>
 				</div>
-				<button 
-					onClick={() => setSelected([])}
-					className='bg-gray-200 hover:bg-gray-300 text-black py-3 px-10 rounded-xl mb-5'
-				>
-					<FontAwesomeIcon icon={faX} /> De-select all
-				</button>
+				<div className="flex flex-row flex-wrap">
+					<button 
+						onClick={() => setSelected([])}
+						className='bg-gray-200 hover:bg-gray-300 text-black py-3 px-10 rounded-xl mb-5 mr-5'
+					>
+						<FontAwesomeIcon icon={faX} /> De-select all
+					</button>
+					<button 
+						onClick={() => {
+							const body = document.querySelector('body') as HTMLBodyElement;
+							body.style.overflow = 'hidden';
+							setPreview(true);
+						}}
+						className='bg-gray-200 hover:bg-gray-300 text-black py-3 px-10 rounded-xl mb-5'
+					>
+						<FontAwesomeIcon icon={faCalendar} /> Preview
+					</button>
+				</div>
 				<div>
 					{coursesJSX}
 				</div>
@@ -220,6 +225,24 @@ function SchedulesForm({ id }: { id?: number }) {
 					>
 						<FontAwesomeIcon icon={faFloppyDisk}/> Save Changes
 					</button>
+				</div>
+			</div>
+			<div 
+				style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', display: preview ? 'block' : 'none' }}
+				className="fixed top-0 bottom-0 left-0 right-0 overflow-y-scroll"
+			>
+				<div className="app-container px-5 sm:px-10 lg:px-16 no-shadow my-10 mx-auto">
+					<button 
+						onClick={() => {
+							const body = document.querySelector('body') as HTMLBodyElement;
+							body.style.overflow = 'auto';
+							setPreview(false);
+						}}
+						className="py-10 block w-full text-3xl text-white hover:text-gray-400 text-left"
+					>
+						<FontAwesomeIcon icon={faX} /> Close
+					</button>
+					<Calendar data={selected} />
 				</div>
 			</div>
 		</>

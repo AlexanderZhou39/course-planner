@@ -11,7 +11,7 @@ function Courses() {
 	const [data, setData] = useState(getCourses().sort(compareCourses));
 
 	const onDelete = (id: string) => {
-		setData(deleteCourse(id));
+		setData(deleteCourse(id).sort(compareCourses));
 	};
 
 	const cards = data.map(course => (

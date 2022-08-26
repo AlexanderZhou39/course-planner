@@ -80,7 +80,9 @@ function generateSchedules(selectedCourses: string[], courses: Course[]) {
 			sections: [],
 			startTimeSum: 0,
 			timesCount: 0,
-			avgStartTime: 0
+			avgStartTime: 0,
+			weightedSeats: 0,
+			totalSeats: 0
 		});
 	}
 
@@ -115,7 +117,11 @@ function generateSchedules(selectedCourses: string[], courses: Course[]) {
 				if (noConflict) {
 					branches++;
 					const courseSection = {
-						...section,
+						id: section.id,
+						code: section.code,
+						instructor: section.instructor,
+						times: section.times,
+						seats: section.seats,
 						course: {
 							name: course.name,
 							code: course.code,
@@ -128,12 +134,18 @@ function generateSchedules(selectedCourses: string[], courses: Course[]) {
 					const newSTSum = possibility.startTimeSum + sumAndCount.sum;
 					const newTimesCount = possibility.timesCount + sumAndCount.records;
 					newResults.push({
-						...possibility,
+						id: possibility.id,
+						name: possibility.name,
+						noConflict: possibility.noConflict,
+						courses: possibility.courses,
+						finished: false,
 						startTimeSum: newSTSum,
 						timesCount: newTimesCount,
 						totalUnits: possibility.totalUnits + course.units,
 						minSeats: Math.min(section.seats, possibility.minSeats),
 						sections: newSections,
+						weightedSeats: possibility.weightedSeats + (1 / Math.pow(section.seats, 8)),
+						totalSeats: possibility.totalSeats + section.seats,
 						avgStartTime: newSTSum / Math.min(newTimesCount, 1)
 					})
 				}
@@ -147,13 +159,18 @@ function generateSchedules(selectedCourses: string[], courses: Course[]) {
 		results = newResults;
 		postMessage({
 			type: 'progress',
-			data: (c + 1) / selectedCourses.length
+			data: (c + 1) / selectedCourses.length * 0.8
 		});
 	}
 
 	// merge equivalent schedules
 	let xI = 0;
 	while (xI < results.length) {
+		postMessage({
+			type: 'progress',
+			data: (xI + 1) / results.length * 0.15 + 0.8
+		});
+
 		let yI = xI + 1;
 		while (yI < results.length) {
 			if (equivalentSchedules(results[xI], results[yI])) {
@@ -167,8 +184,12 @@ function generateSchedules(selectedCourses: string[], courses: Course[]) {
 
 	// assign unique names to results
 	for (let i = 0; i < results.length; i++) {
+		postMessage({
+			type: 'progress',
+			data: (i + 1) / results.length * 0.05 + 0.95
+		});
 		const generated = results[i];
-		generated.name = `generated-${i}`;
+		generated.name = `Schedule-${i}`;
 	}
 
 	return results;

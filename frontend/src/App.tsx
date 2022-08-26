@@ -8,6 +8,7 @@ import SchedulesForm from './pages/schedulesForm';
 import SchedulesGenerator from './pages/schedulesGenerator';
 import CalendarView from './pages/calendar';
 import './App.css';
+import SchedulesMenu from './pages/schedulesMenu';
 
 function App() {
 	return (
@@ -29,6 +30,9 @@ function App() {
 						</Route>
 						<Route path='/schedules'>
 							<Schedules />
+						</Route>
+						<Route path='/schedules/menu'>
+							<SchedulesMenu />
 						</Route>
 						<Route path='/schedules/add'>
 							<SchedulesForm />

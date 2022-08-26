@@ -1,46 +1,27 @@
 import { useEffect, useState, useRef } from 'react';
 import { CourseSection } from '../../types';
+import { getRandomColors } from '../../utils/eventColors';
 import s from './calendar.module.css';
 import Day from './day';
 import TimeColumn from './time';
 
 type P = {
 	data: CourseSection[] | undefined,
-	showSeats?: boolean
+	showSeats?: boolean,
+	customColors?: string[]
 }
 
 const getWindowWidth = () => {
 	return window.innerWidth;
 };
 
-const eventColors = [ 
-	'#02c39a', '#fde74c', '#d9c5b2', '#ffa987', '#329F5B',
-	'#50d8d7', '#dcd6f7', '#BBDB9B', '#9DBF9E', '#E1F0C4',
-	'#C2D3CD', '#ECE2D0', '#758E4F', '#62C370', '#BBBE64',
-	'#F7B2AD', '#72A276'
-];
 
-const shuffleArray = (array: string[]) => {
-	let currentIndex = array.length, randomIndex;
-  
-	// While there remain elements to shuffle.
-	while (currentIndex != 0) {
-		// Pick a remaining element.
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex--;
-	
-		// And swap it with the current element.
-		[array[currentIndex], array[randomIndex]] = [
-			array[randomIndex], array[currentIndex]
-		];
-	}
-	return array;
-};
-
-function Calendar({ data, showSeats }: P) {
+function Calendar({ data, showSeats, customColors }: P) {
 	const days = [0, 1, 2, 3, 4];
 	const [windowWidth, setWindowWidth] = useState(getWindowWidth());
-	const colors = useRef(shuffleArray([...eventColors])).current;
+	const dColors = useRef(getRandomColors()).current;
+	
+	const colors = customColors || dColors;
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -72,9 +53,13 @@ function Calendar({ data, showSeats }: P) {
 			});
 
 			for (let x = 0; x < section.times.length; x++) {
-				const start = new Date(section.times[x].start);
-				const end = new Date(section.times[x].end);
-				if (!(start.getMinutes() < end.getMinutes())) {
+				const time = section.times[x];
+				if (time.type === 'Final') {
+					continue;
+				}
+				const start = new Date(time.start);
+				const end = new Date(time.end);
+				if (!(start.getTime() < end.getTime())) {
 					continue;
 				}
 				if (start.getHours() < minTime) {
@@ -115,7 +100,7 @@ function Calendar({ data, showSeats }: P) {
 		);
 	}
 
-	let blockSize = 5;
+	let blockSize = 4;
 	if (windowWidth < 768) {
 		blockSize = 3;
 	}

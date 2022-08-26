@@ -48,7 +48,9 @@ export type PossibleSchedule = Schedule & {
 	minSeats: number,
 	startTimeSum: number,
 	timesCount: number,
-	avgStartTime: number
+	avgStartTime: number,
+	weightedSeats: number,
+	totalSeats: number
 }
 
 export type IdCounter = {

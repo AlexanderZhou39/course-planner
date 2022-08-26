@@ -43,6 +43,7 @@ const textContrast = (hex: string) => {
 
 function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 	const numBlocks = maxTime - minTime + 4;
+	
 	const blocks = [];
 	for (let i = 0; i < numBlocks; i++) {
 		blocks.push(
@@ -121,7 +122,7 @@ function Day({ data, day, minTime, maxTime, showLabel, size, colors }: P) {
 									backgroundColor: eventColor,
 									color: textColor
 								}}
-								className="w-full h-full rounded-xl overflow-y-scroll py-2 z-20"
+								className="w-full event-box text-sm h-full rounded-xl overflow-y-scroll py-2 z-20"
 							>
 								<h4 className='text-center'>{time.type.toUpperCase()}</h4>
 								<h4 className='text-center'>
