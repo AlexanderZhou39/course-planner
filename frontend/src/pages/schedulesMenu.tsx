@@ -9,7 +9,7 @@ function SchedulesMenu() {
 			<h1 className="text-2xl font-bold text-center mb-16">
 				Choose a method
 			</h1>
-			<div className="max-w-5xl mx-auto flex flex-row flex-wrap justify-between">
+			<div className="max-w-5xl mx-auto flex flex-row flex-wrap justify-between mb-10">
 				<Link 
 					to="/schedules/generate" 
 					className={`w-full sm:w-5/12 px-3 py-10 md:p-10 bg-white rounded-xl shadow-xl ${s.optionCard}`}
