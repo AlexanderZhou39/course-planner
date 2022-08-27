@@ -23,7 +23,7 @@ function DaysWidget({ secId, value, id }: { secId: string, value: number[], id: 
 						0: !days[0]
 					})
 				}} 
-				className={`${s.day} cursor-pointer ${days[0] ? s.selected : 'hover:bg-gray-200'}`}>
+				className={`${s.day} cursor-pointer ${days[0] ? s.selected : ''}`}>
 				Mon
 			</span>
 			<span
@@ -33,7 +33,7 @@ function DaysWidget({ secId, value, id }: { secId: string, value: number[], id: 
 						1: !days[1]
 					})
 				}} 
-				className={`${s.day} cursor-pointer ${days[1] ? s.selected : 'hover:bg-gray-200'}`}>
+				className={`${s.day} cursor-pointer ${days[1] ? s.selected : ''}`}>
 				Tue
 			</span>
 			<span
@@ -43,7 +43,7 @@ function DaysWidget({ secId, value, id }: { secId: string, value: number[], id: 
 						2: !days[2]
 					})
 				}} 
-				className={`${s.day} cursor-pointer ${days[2] ? s.selected : 'hover:bg-gray-200'}`}>
+				className={`${s.day} cursor-pointer ${days[2] ? s.selected : ''}`}>
 				Wed
 			</span>
 			<span
@@ -53,7 +53,7 @@ function DaysWidget({ secId, value, id }: { secId: string, value: number[], id: 
 						3: !days[3]
 					})
 				}} 
-				className={`${s.day} cursor-pointer ${days[3] ? s.selected : 'hover:bg-gray-200'}`}>
+				className={`${s.day} cursor-pointer ${days[3] ? s.selected : ''}`}>
 				Thu
 			</span>
 			<span
@@ -63,7 +63,7 @@ function DaysWidget({ secId, value, id }: { secId: string, value: number[], id: 
 						4: !days[4]
 					})
 				}} 
-				className={`${s.day} cursor-pointer ${days[4] ? s.selected : 'hover:bg-gray-200'}`}>
+				className={`${s.day} cursor-pointer ${days[4] ? s.selected : ''}`}>
 				Fri
 			</span>
 			<span
@@ -73,7 +73,7 @@ function DaysWidget({ secId, value, id }: { secId: string, value: number[], id: 
 						5: !days[5]
 					})
 				}} 
-				className={`${s.day} cursor-pointer ${days[5] ? s.selected : 'hover:bg-gray-200'}`}>
+				className={`${s.day} cursor-pointer ${days[5] ? s.selected : ''}`}>
 				Sat
 			</span>
 			<span
@@ -83,7 +83,7 @@ function DaysWidget({ secId, value, id }: { secId: string, value: number[], id: 
 						6: !days[6]
 					})
 				}} 
-				className={`${s.day} cursor-pointer ${days[6] ? s.selected : 'hover:bg-gray-200'}`}>
+				className={`${s.day} cursor-pointer ${days[6] ? s.selected : ''}`}>
 				Sun
 			</span>
 		</div>
