@@ -9,10 +9,12 @@ import SchedulesGenerator from './pages/schedulesGenerator';
 import CalendarView from './pages/calendar';
 import './App.css';
 import SchedulesMenu from './pages/schedulesMenu';
+import Footer from './components/footer';
 
 function App() {
 	return (
-		<div className="App">
+		<>
+		<div className="min-h-screen">
 			<Navbar />
 			<div className="px-5 relative">
 				<div className="w-full sm:px-5 mt-16 app-container mx-auto">
@@ -55,6 +57,8 @@ function App() {
 				</div>
 			</div>
 		</div>
+		<Footer />
+		</>
 	)
 }
 
