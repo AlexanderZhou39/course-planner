@@ -125,6 +125,7 @@ function CoursesForm({ id }: { id?: number }) {
 		const timeStarts = getSortedInputs(`${section.id}-time-start`);
 		const timeEnds = getSortedInputs(`${section.id}-time-end`);
 		const timeDays = getSortedInputs(`${section.id}-time-days`);
+		const timePlaces = getSortedInputs(`${section.id}-time-place`);
 
 		for (let i = 0; i < times.length; i++) {
 			const time = times[i];
@@ -132,6 +133,7 @@ function CoursesForm({ id }: { id?: number }) {
 			time.start = timeInputToStamp(timeStarts[i].value);
 			time.end = timeInputToStamp(timeEnds[i].value);
 			time.days = JSON.parse(timeDays[i].value) as number[];
+			time.place = timePlaces[i].value;
 
 			section.times.push(time);
 		}
