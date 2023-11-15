@@ -18,7 +18,7 @@ export default function checkSectionConflict(a: Section, b: Section) {
 			if (!intersection) {
 				continue;
 			}
-			if (aFinal && bT.type !== 'Final') {
+			if ((aFinal && bT.type !== 'Final') || (!aFinal && bT.type === 'Final')) {
 				continue;
 			}
 			if (aT.end - aT.start === 0 || bT.end - bT.start === 0) {
